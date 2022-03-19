@@ -1,34 +1,33 @@
 import "./App.css";
 
-import Button from "./Button";
-import styles from "./App.module.css";
-
 import { useState, useEffect } from "react";
 
-function Hello() {
-  useEffect(() => {
-    console.log("hello");
-    return () => {
-      console.log("bye");
-    };
-  }, []);
-  return <h1>haha</h1>;
-}
-
 function App() {
-  const [isShoing, setIsShoing] = useState(false);
-  const onClick = () => setIsShoing((prev) => !prev);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (e) => setToDo(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (toDo) {
+      setToDos((curArray) => [...curArray, toDo]);
+      setToDo("");
+    }
+  };
+  console.log(toDos);
   return (
     <div>
-      <button onClick={onClick}>{isShoing ? "hide" : "show"}</button>
-      {isShoing ? <Hello /> : null}
-      <h1
-        style={{
-          display: isShoing ? "block" : "none",
-        }}
-      >
-        hide and seek
-      </h1>
+      <h1>My ToDos: {toDos.length}</h1>
+      <form onSubmit={onSubmit}>
+        <input type="text" onChange={onChange} value={toDo} placeholder="Write to do" />
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
