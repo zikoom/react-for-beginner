@@ -1,25 +1,29 @@
 import "./App.css";
-import Coin from "./Coin.js";
+
+import Movie from "./Movie";
 
 import { useState, useEffect } from "react";
 
 function App() {
   console.log("app lendered");
+
   const [isLoading, setIsLoading] = useState(true);
-  const [coinList, setCoinList] = useState([]);
+  const movieURL = "https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year";
 
-  let data = [];
+  let movieList = [];
+
   useEffect(async () => {
-    // call api
+    movieList = await (await fetch(movieURL)).json();
+    movieList = movieList.data.movies;
 
-    const fetched = await fetch("https://api.coinpaprika.com/v1/tickers");
-    setCoinList(await fetched.json());
+    console.log("받아온 영화 데이터: ", movieList);
     setIsLoading(false);
   }, []);
+
   return (
     <div>
-      <h1>Coins!</h1>
-      {isLoading ? <strong> 로딩중 ...</strong> : <Coin coinList={coinList} />}
+      <h1>Movies!</h1>
+      {isLoading ? <strong> 로딩중 ...</strong> : <Movie />}
     </div>
   );
 }
